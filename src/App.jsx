@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import VaccineApp from "./Components/VaccineApp";
+import VaccineApp from "./components/VaccineApp";
 
 function App() {
   return <VaccineApp />;

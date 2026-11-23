@@ -18,15 +18,15 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 1 — Temizlik ve SSR'ı kaldırma
 **Amaç:** Projeyi sade bir Vite + React SPA'ya çevirmek. Özellik eklenmez, mevcut ekran aynen çalışmaya devam eder.
 
-- [ ] `server.js` ve `src/entry-server.jsx` silinsin
-- [ ] `src/entry-client.jsx` → `src/main.jsx` (`hydrateRoot` yerine `createRoot`)
-- [ ] `index.html`: script yolu `main.jsx`, `<!--app-head-->` / `<!--app-html-->` yorumları kaldırılsın,
+- [x] `server.js` ve `src/entry-server.jsx` silinsin
+- [x] `src/entry-client.jsx` → `src/main.jsx` (`hydrateRoot` yerine `createRoot`)
+- [x] `index.html`: script yolu `main.jsx`, `<!--app-head-->` / `<!--app-html-->` yorumları kaldırılsın,
       `lang="tr"`, başlık "Pet Aşı Takip"
-- [ ] `package.json` scriptleri: `dev: vite`, `build: vite build`, `preview: vite preview`
-- [ ] Kaldırılacak paketler: `express`, `compression`, `sirv`, `cross-env`, `tailwindcss`, `postcss`, `autoprefixer`
-- [ ] `src/App.css` silinsin; `src/index.css` Bootstrap'la çakışmayacak şekilde sadeleştirilsin
-- [ ] `src/Components` → `src/components` (küçük harf)
-- [ ] `.gitignore`'a `.env*` eklensin (`!.env.example` hariç)
+- [x] `package.json` scriptleri: `dev: vite`, `build: vite build`, `preview: vite preview`
+- [x] Kaldırılacak paketler: `express`, `compression`, `sirv`, `cross-env`, `tailwindcss`, `postcss`, `autoprefixer`
+- [x] `src/App.css` silinsin; `src/index.css` Bootstrap'la çakışmayacak şekilde sadeleştirilsin
+- [x] `src/Components` → `src/components` (küçük harf)
+- [x] `.gitignore`'a `.env*` eklensin (`!.env.example` hariç)
 
 **Bitti sayılır:** `npm run dev` açılıyor, kayıt ekle/sil çalışıyor, `npm run build` hatasız.
 
