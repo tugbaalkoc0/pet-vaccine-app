@@ -70,13 +70,14 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 3 — Giriş sistemi (Auth)
 **Amaç:** Kullanıcı kayıt olup giriş yapabilsin. Giriş yapmayan ana ekrana giremesin.
 
-- [ ] `react-router` kurulsun. Sayfalar: `/giris`, `/kayit`, `/` (ana ekran), `*` (404)
-- [ ] `AuthContext`: oturum bilgisini tutar, `onAuthStateChange` ile dinler
-- [ ] `ProtectedRoute`: oturum yoksa `/giris`'e yönlendirir
-- [ ] Kayıt sayfası: e-posta + şifre (+ şifre tekrar), hata mesajları Türkçe
-- [ ] Giriş sayfası: e-posta + şifre, "Hesabın yok mu? Kayıt ol" linki
-- [ ] Üst menüde (navbar) kullanıcı e-postası ve "Çıkış yap" butonu
-- [ ] Karar: e-posta onayı açık mı kapalı mı? (Başlangıçta kapalı önerilir, Supabase'in hazır mail servisi test amaçlı ve sınırlı)
+- [x] `react-router` kurulsun. Sayfalar: `/giris`, `/kayit`, `/` (ana ekran), `*` (404)
+- [x] `AuthContext`: oturum bilgisini tutar, `onAuthStateChange` ile dinler
+- [x] `ProtectedRoute`: oturum yoksa `/giris`'e yönlendirir
+- [x] Kayıt sayfası: e-posta + şifre (+ şifre tekrar), hata mesajları Türkçe
+- [x] Giriş sayfası: e-posta + şifre, "Hesabın yok mu? Kayıt ol" linki
+- [x] Üst menüde (navbar) kullanıcı e-postası ve "Çıkış yap" butonu
+- [x] Karar: e-posta onayı açık mı kapalı mı? → **Kapalı** (Supabase Dashboard → Authentication → Sign In/Providers →
+      User Signups → "Confirm email" kapatıldı). Kayıt olan kullanıcı anında giriş yapabiliyor.
 
 **Bitti sayılır:** Kayıt ol, çıkış yap, tekrar giriş yap çalışıyor. Sayfa yenilenince oturum korunuyor.
 
