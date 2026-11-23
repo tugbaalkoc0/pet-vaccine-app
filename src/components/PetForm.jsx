@@ -31,6 +31,11 @@ export default function PetForm({ pet, onClose, onSaved }) {
       return
     }
 
+    if (form.birth_date && form.birth_date > new Date().toISOString().slice(0, 10)) {
+      setError('Doğum tarihi gelecekte olamaz.')
+      return
+    }
+
     setLoading(true)
 
     const kayit = {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import Navbar from '../components/Navbar'
 import PetCard from '../components/PetCard'
 import PetForm from '../components/PetForm'
@@ -12,6 +13,7 @@ import { turkceTarih } from '../utils/dateFormat'
 
 export default function Dashboard() {
   const { user } = useAuth()
+  const { showToast } = useToast()
   const [pets, setPets] = useState([])
   const [ozetAsilar, setOzetAsilar] = useState([])
   const [loading, setLoading] = useState(true)
@@ -19,6 +21,7 @@ export default function Dashboard() {
   const [formAcik, setFormAcik] = useState(false)
   const [duzenlenenPet, setDuzenlenenPet] = useState(null)
   const [silinecekPet, setSilinecekPet] = useState(null)
+  const [siliniyor, setSiliniyor] = useState(false)
 
   const petleriGetir = async () => {
     setLoading(true)
@@ -73,20 +76,25 @@ export default function Dashboard() {
   }
 
   const handleFormSaved = () => {
+    const duzenlemeydi = Boolean(duzenlenenPet)
     setFormAcik(false)
     petleriGetir()
+    showToast(duzenlemeydi ? 'Hayvan güncellendi.' : 'Hayvan eklendi.')
   }
 
   const handleSil = async () => {
+    setSiliniyor(true)
     const { error } = await supabase.from('pets').delete().eq('id', silinecekPet.id)
+    setSiliniyor(false)
     setSilinecekPet(null)
 
     if (error) {
-      setError('Silinemedi, lütfen tekrar deneyin.')
+      showToast('Silinemedi, lütfen tekrar deneyin.', 'error')
       return
     }
 
     petleriGetir()
+    showToast('Hayvan silindi.')
   }
 
   return (
@@ -157,6 +165,7 @@ export default function Dashboard() {
           message={`"${silinecekPet.name}" silinecek. Bu hayvana ait tüm aşı kayıtları da birlikte silinecek. Emin misin?`}
           onConfirm={handleSil}
           onCancel={() => setSilinecekPet(null)}
+          loading={siliniyor}
         />
       )}
     </>

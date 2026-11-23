@@ -119,12 +119,12 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 6 — Arayüz cilası
 **Amaç:** Uygulama "öğrenci projesi" gibi değil, düzgün bir ürün gibi görünsün.
 
-- [ ] Mobil uyumlu (telefonda kontrol et)
-- [ ] Form doğrulama: boş alan, gelecekte yapılmış aşı tarihi, sonraki tarihin yapılış tarihinden önce olması
-- [ ] Butonlarda yükleniyor durumu (çift tıklamayı engelle)
-- [ ] Başarılı/başarısız işlemler için küçük bildirim (toast)
-- [ ] Favicon ve uygulama adı/logo
-- [ ] Konsolda hata/uyarı kalmasın
+- [x] Mobil uyumlu (telefonda kontrol et)
+- [x] Form doğrulama: boş alan, gelecekte yapılmış aşı tarihi, sonraki tarihin yapılış tarihinden önce olması
+- [x] Butonlarda yükleniyor durumu (çift tıklamayı engelle)
+- [x] Başarılı/başarısız işlemler için küçük bildirim (toast)
+- [x] Favicon ve uygulama adı/logo
+- [x] Konsolda hata/uyarı kalmasın
 
 ---
 

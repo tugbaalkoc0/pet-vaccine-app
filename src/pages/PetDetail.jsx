@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { supabase } from '../lib/supabase'
+import { useToast } from '../context/ToastContext'
 import Navbar from '../components/Navbar'
 import VaccineCard from '../components/VaccineCard'
 import VaccineForm from '../components/VaccineForm'
@@ -16,6 +17,7 @@ const turEmoji = {
 
 export default function PetDetail() {
   const { id } = useParams()
+  const { showToast } = useToast()
   const [pet, setPet] = useState(null)
   const [vaccinations, setVaccinations] = useState([])
   const [loading, setLoading] = useState(true)
@@ -23,6 +25,7 @@ export default function PetDetail() {
   const [formAcik, setFormAcik] = useState(false)
   const [duzenlenenAsi, setDuzenlenenAsi] = useState(null)
   const [silinecekAsi, setSilinecekAsi] = useState(null)
+  const [siliniyor, setSiliniyor] = useState(false)
 
   const petiGetir = async () => {
     const { data, error } = await supabase
@@ -77,20 +80,25 @@ export default function PetDetail() {
   }
 
   const handleFormSaved = () => {
+    const duzenlemeydi = Boolean(duzenlenenAsi)
     setFormAcik(false)
     asilariGetir()
+    showToast(duzenlemeydi ? 'Aşı kaydı güncellendi.' : 'Aşı eklendi.')
   }
 
   const handleAsiSil = async () => {
+    setSiliniyor(true)
     const { error } = await supabase.from('vaccinations').delete().eq('id', silinecekAsi.id)
+    setSiliniyor(false)
     setSilinecekAsi(null)
 
     if (error) {
-      setError('Silinemedi, lütfen tekrar deneyin.')
+      showToast('Silinemedi, lütfen tekrar deneyin.', 'error')
       return
     }
 
     asilariGetir()
+    showToast('Aşı kaydı silindi.')
   }
 
   return (
@@ -159,6 +167,7 @@ export default function PetDetail() {
           message={`"${silinecekAsi.vaccine_name}" aşı kaydı silinecek. Emin misin?`}
           onConfirm={handleAsiSil}
           onCancel={() => setSilinecekAsi(null)}
+          loading={siliniyor}
         />
       )}
     </>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { supabase } from '../lib/supabase'
+import { useToast } from '../context/ToastContext'
 
 const hataMesajlari = {
   'Invalid login credentials': 'E-posta veya şifre hatalı.',
@@ -12,6 +13,7 @@ export default function Login() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const { showToast } = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,6 +29,7 @@ export default function Login() {
       return
     }
 
+    showToast('Giriş yapıldı, hoş geldin!')
     navigate('/')
   }
 
