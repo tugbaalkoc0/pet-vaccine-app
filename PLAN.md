@@ -144,14 +144,16 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 8 — Deploy
 **Amaç:** Uygulama canlı ve kalıcı olarak erişilebilir olsun.
 
-- [ ] Vercel'de GitHub reposundan proje oluştur (framework: Vite)
-- [ ] Vercel ortam değişkenleri: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`
-- [ ] SPA yönlendirmesi için `vercel.json` rewrite (sayfa yenilenince 404 olmasın)
-- [ ] Supabase → Authentication → URL Configuration: Site URL ve Redirect URL'lere Vercel adresi eklensin
-- [ ] Canlı sitede uçtan uca test: kayıt, giriş, hayvan/aşı ekleme, demo hesap, mobil
-- [ ] Supabase Free projeler 1 hafta hareketsiz kalınca duraklatılıyor: haftada bir veritabanına küçük
+- [x] Vercel'de GitHub reposundan proje oluştur (framework: Vite)
+- [x] Vercel ortam değişkenleri: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`
+- [x] SPA yönlendirmesi için `vercel.json` rewrite (sayfa yenilenince 404 olmasın)
+- [x] Supabase → Authentication → URL Configuration: Site URL ve Redirect URL'lere Vercel adresi eklensin
+- [x] Canlı sitede uçtan uca test: kayıt, giriş, hayvan/aşı ekleme, demo hesap, mobil
+- [x] Supabase Free projeler 1 hafta hareketsiz kalınca duraklatılıyor: haftada bir veritabanına küçük
       bir istek atan GitHub Actions cron görevi ekle
-- [ ] README'ye canlı link, GitHub repo açıklamasına (About) link ekle
+- [x] README'ye canlı link, GitHub repo açıklamasına (About) link ekle
+- [x] Ek güvenlik: Supabase Authentication → Rate Limits'te kayıt/giriş saatlik hız sınırı düşürüldü
+      (ücretsiz plan kota aşımına karşı)
 
 **Bitti sayılır:** Başka bir cihazdan canlı linke girip demo hesapla her şey çalışıyor.
 

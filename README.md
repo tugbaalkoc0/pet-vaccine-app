@@ -4,7 +4,8 @@ Evcil hayvan sahiplerinin, hayvanlarının aşılarını ve bir sonraki aşı ta
 bir web uygulaması. Yaklaşan ve geciken aşılar öne çıkarılır, her kullanıcı sadece kendi
 hayvanlarını görür.
 
-**Canlı demo:** _(Faz 8'de eklenecek)_
+**Canlı demo:** [pet-vaccine-app.vercel.app](https://pet-vaccine-app.vercel.app) — giriş ekranındaki
+"🐾 Demo hesapla dene" butonuyla kayıt olmadan deneyebilirsiniz.
 
 ## Özellikler
 
