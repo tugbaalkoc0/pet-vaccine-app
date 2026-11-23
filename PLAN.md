@@ -1,0 +1,163 @@
+# PLAN.md — Pet Vaccine App Yol Haritası
+
+Her faz sonunda uygulama çalışır durumda olmalı. Fazları sırayla yap, birini bitirmeden diğerine geçme.
+Biten görevleri `- [x]` olarak işaretle.
+
+---
+
+## Mevcut durum (başlangıç)
+- React 19 + Vite, Vite'ın SSR şablonuyla kurulmuş (`server.js`, `entry-server.jsx`, Express).
+- Tek bileşen: `src/Components/VaccineApp.jsx`. Ekle/sil/güncelle var ama veriler sadece `useState`'te,
+  sayfa yenilenince kayboluyor.
+- Güncelleme `prompt()` ile yapılıyor, sadece aşı adı değişiyor.
+- Kullanılmayan şeyler: Tailwind, postcss, autoprefixer, `App.css`. `index.css` Vite şablon stilleri Bootstrap'la çakışıyor.
+- Başlık "Vite + React", README boş.
+
+---
+
+## Faz 1 — Temizlik ve SSR'ı kaldırma
+**Amaç:** Projeyi sade bir Vite + React SPA'ya çevirmek. Özellik eklenmez, mevcut ekran aynen çalışmaya devam eder.
+
+- [ ] `server.js` ve `src/entry-server.jsx` silinsin
+- [ ] `src/entry-client.jsx` → `src/main.jsx` (`hydrateRoot` yerine `createRoot`)
+- [ ] `index.html`: script yolu `main.jsx`, `<!--app-head-->` / `<!--app-html-->` yorumları kaldırılsın,
+      `lang="tr"`, başlık "Pet Aşı Takip"
+- [ ] `package.json` scriptleri: `dev: vite`, `build: vite build`, `preview: vite preview`
+- [ ] Kaldırılacak paketler: `express`, `compression`, `sirv`, `cross-env`, `tailwindcss`, `postcss`, `autoprefixer`
+- [ ] `src/App.css` silinsin; `src/index.css` Bootstrap'la çakışmayacak şekilde sadeleştirilsin
+- [ ] `src/Components` → `src/components` (küçük harf)
+- [ ] `.gitignore`'a `.env*` eklensin (`!.env.example` hariç)
+
+**Bitti sayılır:** `npm run dev` açılıyor, kayıt ekle/sil çalışıyor, `npm run build` hatasız.
+
+---
+
+## Faz 2 — Supabase kurulumu ve veritabanı
+**Amaç:** Veritabanı tabloları ve güvenlik kuralları hazır olsun.
+
+- [ ] Supabase'de yeni proje: `pet-vaccine-app` (bölge: eu-central-1)
+- [ ] Tablo `pets`:
+  - `id uuid primary key default gen_random_uuid()`
+  - `user_id uuid not null default auth.uid() references auth.users on delete cascade`
+  - `name text not null`
+  - `species text` (kedi, köpek, kuş, diğer...)
+  - `birth_date date`
+  - `created_at timestamptz default now()`
+- [ ] Tablo `vaccinations`:
+  - `id uuid primary key default gen_random_uuid()`
+  - `pet_id uuid not null references pets(id) on delete cascade`
+  - `user_id uuid not null default auth.uid() references auth.users on delete cascade`
+  - `vaccine_name text not null`
+  - `date_given date not null`
+  - `next_due_date date`
+  - `notes text`
+  - `created_at timestamptz default now()`
+- [ ] İki tabloda da **RLS açık**. Politikalar: kullanıcı sadece `user_id = auth.uid()` olan satırları
+      görebilir / ekleyebilir / güncelleyebilir / silebilir
+- [ ] `vaccinations` insert/update kuralı ek olarak `pet_id`'nin de o kullanıcıya ait olduğunu kontrol etsin
+- [ ] SQL'ler `supabase/migrations/` altında dosya olarak dursun
+- [ ] `@supabase/supabase-js` kurulsun, `src/lib/supabase.js` oluşturulsun
+- [ ] `.env.local`: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` (sadece publishable/anon anahtar)
+- [ ] `.env.example` aynı isimlerle, değerler boş
+
+**Bitti sayılır:** Tablolar Supabase panelinde görünüyor, RLS açık, Security Advisor uyarı vermiyor.
+
+**Öğrenme notu:** RLS neden gerekli? Publishable anahtar herkesin tarayıcısında görünür. Veriyi koruyan
+şey anahtarın gizliliği değil, RLS kurallarıdır.
+
+---
+
+## Faz 3 — Giriş sistemi (Auth)
+**Amaç:** Kullanıcı kayıt olup giriş yapabilsin. Giriş yapmayan ana ekrana giremesin.
+
+- [ ] `react-router` kurulsun. Sayfalar: `/giris`, `/kayit`, `/` (ana ekran), `*` (404)
+- [ ] `AuthContext`: oturum bilgisini tutar, `onAuthStateChange` ile dinler
+- [ ] `ProtectedRoute`: oturum yoksa `/giris`'e yönlendirir
+- [ ] Kayıt sayfası: e-posta + şifre (+ şifre tekrar), hata mesajları Türkçe
+- [ ] Giriş sayfası: e-posta + şifre, "Hesabın yok mu? Kayıt ol" linki
+- [ ] Üst menüde (navbar) kullanıcı e-postası ve "Çıkış yap" butonu
+- [ ] Karar: e-posta onayı açık mı kapalı mı? (Başlangıçta kapalı önerilir, Supabase'in hazır mail servisi test amaçlı ve sınırlı)
+
+**Bitti sayılır:** Kayıt ol, çıkış yap, tekrar giriş yap çalışıyor. Sayfa yenilenince oturum korunuyor.
+
+---
+
+## Faz 4 — Hayvanlar
+**Amaç:** Kullanıcı kendi hayvanlarını yönetebilsin.
+
+- [ ] Ana ekranda hayvan kartları (ad, tür, yaş)
+- [ ] Hayvan ekleme formu (modal ya da ayrı form)
+- [ ] Hayvan düzenleme ve silme (silmeden önce onay sorusu, aşıları da silineceği belirtilsin)
+- [ ] Hayvan detay sayfası: `/hayvan/:id`
+- [ ] Yükleniyor ve hata durumları, hiç hayvan yoksa "İlk hayvanını ekle" boş ekranı
+
+**Bitti sayılır:** İki farklı hesapla giriş yapınca herkes sadece kendi hayvanlarını görüyor.
+
+---
+
+## Faz 5 — Aşılar ve asıl özellik
+**Amaç:** Aşı kayıtları ve yaklaşan/geciken aşı takibi.
+
+- [ ] Hayvan detay sayfasında aşı listesi (tarihe göre sıralı)
+- [ ] Aşı ekleme formu: aşı adı, yapılış tarihi, sonraki tarih, not
+- [ ] Aşı düzenleme `prompt()` ile değil, aynı form ile yapılsın
+- [ ] Aşı silme (onaylı)
+- [ ] `utils/vaccineStatus.js`: sonraki tarihe göre durum hesapla
+  - **Gecikmiş:** tarih geçmiş → kırmızı
+  - **Yaklaşıyor:** 30 gün içinde → sarı
+  - **Zamanı var:** → yeşil
+  - Sonraki tarih yoksa → gri
+- [ ] Ana ekranın üstünde özet: "X gecikmiş, Y yaklaşan aşı" + listesi
+- [ ] Tarihler Türkçe formatta (`23 Kasım 2026`)
+- [ ] (İsteğe bağlı) Sık kullanılan aşılar için öneri listesi (Kuduz, Karma, İç-dış parazit...)
+
+**Bitti sayılır:** Geçmiş tarihli bir aşı kırmızı, 2 hafta sonraki sarı görünüyor.
+
+---
+
+## Faz 6 — Arayüz cilası
+**Amaç:** Uygulama "öğrenci projesi" gibi değil, düzgün bir ürün gibi görünsün.
+
+- [ ] Mobil uyumlu (telefonda kontrol et)
+- [ ] Form doğrulama: boş alan, gelecekte yapılmış aşı tarihi, sonraki tarihin yapılış tarihinden önce olması
+- [ ] Butonlarda yükleniyor durumu (çift tıklamayı engelle)
+- [ ] Başarılı/başarısız işlemler için küçük bildirim (toast)
+- [ ] Favicon ve uygulama adı/logo
+- [ ] Konsolda hata/uyarı kalmasın
+
+---
+
+## Faz 7 — Demo hesap ve README
+**Amaç:** CV'deki linke tıklayan kişi tek tıkla deneyebilsin, repoya bakan kişi projeyi anlasın.
+
+- [ ] Demo kullanıcı oluştur, örnek veri ekle (2-3 hayvan, gecikmiş + yaklaşan + zamanı olan aşılar)
+- [ ] Giriş sayfasında "Demo hesapla dene" butonu
+- [ ] Karar: demo verisi ziyaretçiler tarafından bozulabilir. Çözüm seç: (a) periyodik sıfırlama SQL fonksiyonu,
+      (b) demo kullanıcı için sadece okuma yetkisi
+- [ ] README: proje açıklaması, ekran görüntüleri, canlı link, kullanılan teknolojiler, özellikler,
+      yerelde çalıştırma adımları, veritabanı şeması, RLS açıklaması
+
+---
+
+## Faz 8 — Deploy
+**Amaç:** Uygulama canlı ve kalıcı olarak erişilebilir olsun.
+
+- [ ] Vercel'de GitHub reposundan proje oluştur (framework: Vite)
+- [ ] Vercel ortam değişkenleri: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`
+- [ ] SPA yönlendirmesi için `vercel.json` rewrite (sayfa yenilenince 404 olmasın)
+- [ ] Supabase → Authentication → URL Configuration: Site URL ve Redirect URL'lere Vercel adresi eklensin
+- [ ] Canlı sitede uçtan uca test: kayıt, giriş, hayvan/aşı ekleme, demo hesap, mobil
+- [ ] Supabase Free projeler 1 hafta hareketsiz kalınca duraklatılıyor: haftada bir veritabanına küçük
+      bir istek atan GitHub Actions cron görevi ekle
+- [ ] README'ye canlı link, GitHub repo açıklamasına (About) link ekle
+
+**Bitti sayılır:** Başka bir cihazdan canlı linke girip demo hesapla her şey çalışıyor.
+
+---
+
+## Sonra (isteğe bağlı)
+- E-posta ile aşı hatırlatma (Supabase Edge Function + zamanlanmış görev)
+- Hayvan fotoğrafı (Supabase Storage)
+- Google ile giriş
+- Aşı geçmişini PDF olarak indirme
+- Testler (Vitest + React Testing Library)
