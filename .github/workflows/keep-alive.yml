@@ -1,0 +1,19 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    - cron: "0 6 * * 0" # her Pazar 06:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Supabase'e küçük bir istek at
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" \
+            "$SUPABASE_URL/rest/v1/pets?select=id&limit=1" \
+            -H "apikey: $SUPABASE_PUBLISHABLE_KEY"
