@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { supabase } from '../lib/supabase'
 import Navbar from '../components/Navbar'
+import VaccineCard from '../components/VaccineCard'
+import VaccineForm from '../components/VaccineForm'
+import ConfirmModal from '../components/ConfirmModal'
 import { hesaplaYas } from '../utils/age'
 
 const turEmoji = {
@@ -14,30 +17,81 @@ const turEmoji = {
 export default function PetDetail() {
   const { id } = useParams()
   const [pet, setPet] = useState(null)
+  const [vaccinations, setVaccinations] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [formAcik, setFormAcik] = useState(false)
+  const [duzenlenenAsi, setDuzenlenenAsi] = useState(null)
+  const [silinecekAsi, setSilinecekAsi] = useState(null)
 
-  useEffect(() => {
-    const getir = async () => {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('pets')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle()
+  const petiGetir = async () => {
+    const { data, error } = await supabase
+      .from('pets')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle()
 
-      setLoading(false)
-
-      if (error || !data) {
-        setError('Hayvan bulunamadı.')
-        return
-      }
-
-      setPet(data)
+    if (error || !data) {
+      setError('Hayvan bulunamadı.')
+      return false
     }
 
-    getir()
+    setPet(data)
+    return true
+  }
+
+  const asilariGetir = async () => {
+    const { data, error } = await supabase
+      .from('vaccinations')
+      .select('*')
+      .eq('pet_id', id)
+      .order('next_due_date', { ascending: true, nullsFirst: false })
+
+    if (error) {
+      setError('Aşılar yüklenemedi, lütfen sayfayı yenileyin.')
+      return
+    }
+
+    setVaccinations(data)
+  }
+
+  const hepsiniGetir = async () => {
+    setLoading(true)
+    const petBulundu = await petiGetir()
+    if (petBulundu) await asilariGetir()
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    hepsiniGetir()
   }, [id])
+
+  const handleYeniAsiEkle = () => {
+    setDuzenlenenAsi(null)
+    setFormAcik(true)
+  }
+
+  const handleAsiDuzenle = (asi) => {
+    setDuzenlenenAsi(asi)
+    setFormAcik(true)
+  }
+
+  const handleFormSaved = () => {
+    setFormAcik(false)
+    asilariGetir()
+  }
+
+  const handleAsiSil = async () => {
+    const { error } = await supabase.from('vaccinations').delete().eq('id', silinecekAsi.id)
+    setSilinecekAsi(null)
+
+    if (error) {
+      setError('Silinemedi, lütfen tekrar deneyin.')
+      return
+    }
+
+    asilariGetir()
+  }
 
   return (
     <>
@@ -67,13 +121,46 @@ export default function PetDetail() {
               {hesaplaYas(pet.birth_date) !== null && <> · {hesaplaYas(pet.birth_date)} yaşında</>}
             </p>
 
-            <div className="card p-4 mt-4">
-              <h5>Aşılar</h5>
-              <p className="text-muted mb-0">Aşı takibi Faz 5'te eklenecek.</p>
+            <div className="d-flex justify-content-between align-items-center mt-4 mb-3">
+              <h5 className="mb-0">Aşılar</h5>
+              <button className="btn btn-primary btn-sm" onClick={handleYeniAsiEkle}>
+                + Aşı ekle
+              </button>
             </div>
+
+            {vaccinations.length === 0 && (
+              <p className="text-muted">Henüz hiç aşı kaydı yok.</p>
+            )}
+
+            {vaccinations.map(asi => (
+              <VaccineCard
+                key={asi.id}
+                vaccination={asi}
+                onEdit={handleAsiDuzenle}
+                onDelete={setSilinecekAsi}
+              />
+            ))}
           </>
         )}
       </div>
+
+      {formAcik && (
+        <VaccineForm
+          petId={id}
+          vaccination={duzenlenenAsi}
+          onClose={() => setFormAcik(false)}
+          onSaved={handleFormSaved}
+        />
+      )}
+
+      {silinecekAsi && (
+        <ConfirmModal
+          title="Aşı kaydını sil"
+          message={`"${silinecekAsi.vaccine_name}" aşı kaydı silinecek. Emin misin?`}
+          onConfirm={handleAsiSil}
+          onCancel={() => setSilinecekAsi(null)}
+        />
+      )}
     </>
   )
 }

@@ -99,18 +99,18 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 5 — Aşılar ve asıl özellik
 **Amaç:** Aşı kayıtları ve yaklaşan/geciken aşı takibi.
 
-- [ ] Hayvan detay sayfasında aşı listesi (tarihe göre sıralı)
-- [ ] Aşı ekleme formu: aşı adı, yapılış tarihi, sonraki tarih, not
-- [ ] Aşı düzenleme `prompt()` ile değil, aynı form ile yapılsın
-- [ ] Aşı silme (onaylı)
-- [ ] `utils/vaccineStatus.js`: sonraki tarihe göre durum hesapla
+- [x] Hayvan detay sayfasında aşı listesi (tarihe göre sıralı)
+- [x] Aşı ekleme formu: aşı adı, yapılış tarihi, sonraki tarih, not
+- [x] Aşı düzenleme `prompt()` ile değil, aynı form ile yapılsın
+- [x] Aşı silme (onaylı)
+- [x] `utils/vaccineStatus.js`: sonraki tarihe göre durum hesapla
   - **Gecikmiş:** tarih geçmiş → kırmızı
   - **Yaklaşıyor:** 30 gün içinde → sarı
   - **Zamanı var:** → yeşil
   - Sonraki tarih yoksa → gri
-- [ ] Ana ekranın üstünde özet: "X gecikmiş, Y yaklaşan aşı" + listesi
-- [ ] Tarihler Türkçe formatta (`23 Kasım 2026`)
-- [ ] (İsteğe bağlı) Sık kullanılan aşılar için öneri listesi (Kuduz, Karma, İç-dış parazit...)
+- [x] Ana ekranın üstünde özet: "X gecikmiş, Y yaklaşan aşı" + listesi
+- [x] Tarihler Türkçe formatta (`23 Kasım 2026`)
+- [x] Sık kullanılan aşılar için öneri listesi (Kuduz, Karma, İç/dış parazit...) — `datalist` ile
 
 **Bitti sayılır:** Geçmiş tarihli bir aşı kırmızı, 2 hafta sonraki sarı görünüyor.
 
