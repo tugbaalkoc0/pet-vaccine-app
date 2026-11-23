@@ -35,15 +35,15 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 2 — Supabase kurulumu ve veritabanı
 **Amaç:** Veritabanı tabloları ve güvenlik kuralları hazır olsun.
 
-- [ ] Supabase'de yeni proje: `pet-vaccine-app` (bölge: eu-central-1)
-- [ ] Tablo `pets`:
+- [x] Supabase'de yeni proje: `pet-vaccine-app` (bölge: eu-central-1)
+- [x] Tablo `pets`:
   - `id uuid primary key default gen_random_uuid()`
   - `user_id uuid not null default auth.uid() references auth.users on delete cascade`
   - `name text not null`
   - `species text` (kedi, köpek, kuş, diğer...)
   - `birth_date date`
   - `created_at timestamptz default now()`
-- [ ] Tablo `vaccinations`:
+- [x] Tablo `vaccinations`:
   - `id uuid primary key default gen_random_uuid()`
   - `pet_id uuid not null references pets(id) on delete cascade`
   - `user_id uuid not null default auth.uid() references auth.users on delete cascade`
@@ -52,13 +52,13 @@ Biten görevleri `- [x]` olarak işaretle.
   - `next_due_date date`
   - `notes text`
   - `created_at timestamptz default now()`
-- [ ] İki tabloda da **RLS açık**. Politikalar: kullanıcı sadece `user_id = auth.uid()` olan satırları
+- [x] İki tabloda da **RLS açık**. Politikalar: kullanıcı sadece `user_id = auth.uid()` olan satırları
       görebilir / ekleyebilir / güncelleyebilir / silebilir
-- [ ] `vaccinations` insert/update kuralı ek olarak `pet_id`'nin de o kullanıcıya ait olduğunu kontrol etsin
-- [ ] SQL'ler `supabase/migrations/` altında dosya olarak dursun
-- [ ] `@supabase/supabase-js` kurulsun, `src/lib/supabase.js` oluşturulsun
-- [ ] `.env.local`: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` (sadece publishable/anon anahtar)
-- [ ] `.env.example` aynı isimlerle, değerler boş
+- [x] `vaccinations` insert/update kuralı ek olarak `pet_id`'nin de o kullanıcıya ait olduğunu kontrol etsin
+- [x] SQL'ler `supabase/migrations/` altında dosya olarak dursun
+- [x] `@supabase/supabase-js` kurulsun, `src/lib/supabase.js` oluşturulsun
+- [x] `.env.local`: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` (sadece publishable/anon anahtar)
+- [x] `.env.example` aynı isimlerle, değerler boş
 
 **Bitti sayılır:** Tablolar Supabase panelinde görünüyor, RLS açık, Security Advisor uyarı vermiyor.
 
