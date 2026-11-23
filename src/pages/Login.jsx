@@ -7,11 +7,15 @@ const hataMesajlari = {
   'Invalid login credentials': 'E-posta veya şifre hatalı.',
 }
 
+const DEMO_EMAIL = 'demo@petasitakip.app'
+const DEMO_PASSWORD = 'DemoAsi2026!'
+
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [demoLoading, setDemoLoading] = useState(false)
   const navigate = useNavigate()
   const { showToast } = useToast()
 
@@ -30,6 +34,28 @@ export default function Login() {
     }
 
     showToast('Giriş yapıldı, hoş geldin!')
+    navigate('/')
+  }
+
+  const handleDemoGiris = async () => {
+    setError('')
+    setDemoLoading(true)
+
+    const { error: girisHatasi } = await supabase.auth.signInWithPassword({
+      email: DEMO_EMAIL,
+      password: DEMO_PASSWORD,
+    })
+
+    if (girisHatasi) {
+      setDemoLoading(false)
+      setError('Demo hesabına giriş yapılamadı, lütfen tekrar deneyin.')
+      return
+    }
+
+    await supabase.rpc('reset_demo_data')
+
+    setDemoLoading(false)
+    showToast('Demo hesabıyla giriş yapıldı!')
     navigate('/')
   }
 
@@ -62,8 +88,17 @@ export default function Login() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary" disabled={loading}>
+        <button type="submit" className="btn btn-primary" disabled={loading || demoLoading}>
           {loading ? 'Giriş yapılıyor...' : 'Giriş yap'}
+        </button>
+
+        <button
+          type="button"
+          className="btn btn-outline-secondary mt-2"
+          onClick={handleDemoGiris}
+          disabled={loading || demoLoading}
+        >
+          {demoLoading ? 'Demo hazırlanıyor...' : '🐾 Demo hesapla dene'}
         </button>
 
         <p className="mt-3 mb-0 text-center">

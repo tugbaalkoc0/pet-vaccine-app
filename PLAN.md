@@ -131,12 +131,13 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 7 — Demo hesap ve README
 **Amaç:** CV'deki linke tıklayan kişi tek tıkla deneyebilsin, repoya bakan kişi projeyi anlasın.
 
-- [ ] Demo kullanıcı oluştur, örnek veri ekle (2-3 hayvan, gecikmiş + yaklaşan + zamanı olan aşılar)
-- [ ] Giriş sayfasında "Demo hesapla dene" butonu
-- [ ] Karar: demo verisi ziyaretçiler tarafından bozulabilir. Çözüm seç: (a) periyodik sıfırlama SQL fonksiyonu,
-      (b) demo kullanıcı için sadece okuma yetkisi
-- [ ] README: proje açıklaması, ekran görüntüleri, canlı link, kullanılan teknolojiler, özellikler,
-      yerelde çalıştırma adımları, veritabanı şeması, RLS açıklaması
+- [x] Demo kullanıcı oluştur, örnek veri ekle (2-3 hayvan, gecikmiş + yaklaşan + zamanı olan aşılar)
+- [x] Giriş sayfasında "Demo hesapla dene" butonu
+- [x] Karar: demo verisi ziyaretçiler tarafından bozulabilir. **Seçilen çözüm:** demo hesabıyla her
+      girişte `reset_demo_data()` Postgres fonksiyonu çağrılır, mevcut veriler silinip aynı 3 hayvan/
+      5 aşı örneği (tarihler "şu an"a göre bağıl) yeniden oluşturulur. Cron/Edge Function gerekmiyor.
+- [x] README: proje açıklaması, kullanılan teknolojiler, özellikler, yerelde çalıştırma adımları,
+      veritabanı şeması, RLS açıklaması (ekran görüntüleri ve canlı link Faz 8'de eklenecek)
 
 ---
 
