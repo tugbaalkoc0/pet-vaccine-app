@@ -2,20 +2,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes } from 'react-router'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
-import Navbar from './components/Navbar'
-import VaccineApp from './components/VaccineApp'
+import Dashboard from './pages/Dashboard'
+import PetDetail from './pages/PetDetail'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
-
-function Dashboard() {
-  return (
-    <>
-      <Navbar />
-      <VaccineApp />
-    </>
-  )
-}
 
 function App() {
   return (
@@ -28,6 +19,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hayvan/:id"
+          element={
+            <ProtectedRoute>
+              <PetDetail />
             </ProtectedRoute>
           }
         />

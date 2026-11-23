@@ -86,11 +86,11 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 4 — Hayvanlar
 **Amaç:** Kullanıcı kendi hayvanlarını yönetebilsin.
 
-- [ ] Ana ekranda hayvan kartları (ad, tür, yaş)
-- [ ] Hayvan ekleme formu (modal ya da ayrı form)
-- [ ] Hayvan düzenleme ve silme (silmeden önce onay sorusu, aşıları da silineceği belirtilsin)
-- [ ] Hayvan detay sayfası: `/hayvan/:id`
-- [ ] Yükleniyor ve hata durumları, hiç hayvan yoksa "İlk hayvanını ekle" boş ekranı
+- [x] Ana ekranda hayvan kartları (ad, tür, yaş)
+- [x] Hayvan ekleme formu (modal ya da ayrı form)
+- [x] Hayvan düzenleme ve silme (silmeden önce onay sorusu, aşıları da silineceği belirtilsin)
+- [x] Hayvan detay sayfası: `/hayvan/:id`
+- [x] Yükleniyor ve hata durumları, hiç hayvan yoksa "İlk hayvanını ekle" boş ekranı
 
 **Bitti sayılır:** İki farklı hesapla giriş yapınca herkes sadece kendi hayvanlarını görüyor.
 
