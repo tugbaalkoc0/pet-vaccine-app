@@ -1,17 +1,31 @@
+import { Link } from 'react-router'
 import { useAuth } from '../context/AuthContext'
 
 export default function Navbar() {
   const { user, signOut } = useAuth()
+  const adSoyad = user?.user_metadata?.full_name
 
   return (
     <nav className="navbar navbar-light bg-light border-bottom mb-4">
       <div className="container justify-content-between">
         <span className="navbar-brand mb-0 h1">🐾 Pet Aşı Takip</span>
-        <div className="d-flex align-items-center gap-3">
-          <span className="text-muted small">{user?.email}</span>
-          <button onClick={signOut} className="btn btn-outline-secondary btn-sm">
-            Çıkış yap
+        <div className="dropdown">
+          <button
+            className="btn btn-outline-secondary btn-sm dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+          >
+            {adSoyad || user?.email}
           </button>
+          <ul className="dropdown-menu dropdown-menu-end">
+            <li>
+              <Link className="dropdown-item" to="/profil">Profil ayarları</Link>
+            </li>
+            <li><hr className="dropdown-divider" /></li>
+            <li>
+              <button className="dropdown-item" onClick={signOut}>Çıkış yap</button>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
