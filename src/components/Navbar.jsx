@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-light bg-light border-bottom mb-4">
       <div className="container justify-content-between">
-        <span className="navbar-brand mb-0 h1">🐾 Pet Aşı Takip</span>
+        <span className="navbar-brand mb-0 h1">🐾 e-Pet</span>
         <div className="d-flex align-items-center gap-2">
           <Link to="/veterinerler" className="btn btn-outline-secondary btn-sm">
             Anlaşmalı Veterinerler
