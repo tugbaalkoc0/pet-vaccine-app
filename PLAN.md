@@ -1,4 +1,4 @@
-# PLAN.md — Pet Vaccine App Yol Haritası
+# PLAN.md — e-Pet Yol Haritası
 
 Her faz sonunda uygulama çalışır durumda olmalı. Fazları sırayla yap, birini bitirmeden diğerine geçme.
 Biten görevleri `- [x]` olarak işaretle.
