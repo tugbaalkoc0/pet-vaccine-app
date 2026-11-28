@@ -159,6 +159,91 @@ Biten görevleri `- [x]` olarak işaretle.
 
 ---
 
+## Faz 9 — Profil ayarları
+**Amaç:** Kullanıcı kendi hesap bilgilerini (isim, şifre) yönetebilsin.
+
+- [ ] Navbar'da kullanıcı adı/e-posta yanına profil ikonu (avatar ya da ☰) + dropdown menü
+- [ ] `/profil` sayfası ya da modal: isim değiştirme formu
+- [ ] Şifre değiştirme formu (yeni şifre + tekrar)
+- [ ] Form doğrulama, başarı/hata bildirimleri (mevcut toast sistemi kullanılsın)
+- [ ] Navbar'da isim girilmişse e-posta yerine isim gösterilsin
+
+**Bitti sayılır:** İsim değiştirilip sayfa yenilenince kalıyor, şifre değiştirip çıkış-giriş yeni şifreyle çalışıyor.
+
+**Öğrenme notu:** İsim gibi ek alanlar Supabase Auth'un `user_metadata` alanında tutulacak, ayrı bir
+`profiles` tablosu açmayacağız — ileride profil fotoğrafı gibi şeyler gerekirse o zaman tabloya geçeriz.
+
+---
+
+## Faz 10 — Gerçek zamanlı senkronizasyon
+**Amaç:** Aynı hesapla iki sekme/cihaz açıkken biri değişiklik yapınca diğeri de anında görsün.
+
+- [ ] Supabase panelinde `pets` ve `vaccinations` tablolarında Realtime açılsın
+- [ ] Kullanıcıya özel `postgres_changes` aboneliği (insert/update/delete) için bir hook
+- [ ] Ana ekran ve hayvan detay sayfası, gelen event'e göre yerel state'i güncellesin (yeniden fetch yerine)
+- [ ] Sayfa/bileşen kapanınca abonelik temizlensin (memory leak olmasın)
+- [ ] İki farklı sekmede test: biri aşı eklerken diğeri anında görüyor mu?
+
+**Bitti sayılır:** Aynı hesapla açılan iki sekmeden birinde hayvan/aşı eklenince diğeri sayfa
+yenilemeden güncelleniyor.
+
+**Öğrenme notu:** Realtime, Postgres'teki değişiklikleri bir WebSocket üzerinden anlık yayınlayan bir
+Supabase özelliği. RLS kuralları Realtime'da da geçerli — kullanıcı sadece kendi satırlarındaki
+değişiklikleri alabiliyor. Ücretsiz plana dahil, ek maliyet yok.
+
+---
+
+## Faz 11 — Türe göre tavsiye edilen aşı aralığı
+**Amaç:** Aşı eklerken türe ve aşıya göre önerilen sonraki tarih otomatik önerilsin.
+
+- [ ] Tablo `vaccine_guidelines`: `species`, `vaccine_name`, önerilen ilk yaş, tekrar aralığı (ay), not
+- [ ] RLS: giriş yapmış herkes SELECT yapabilsin; INSERT/UPDATE/DELETE kapalı (veri migration ile elle doldurulacak)
+- [ ] Yaygın tür ve aşılar için referans veri migration'ı (kedi, köpek, kuş... kuduz, karma, parazit vb.)
+- [ ] Aşı ekleme formunda: hayvanın türüne göre aşı adı seçildiğinde "önerilen sonraki tarih" otomatik
+      dolsun, kullanıcı isterse değiştirebilsin
+- [ ] Görünür bir uyarı: "Bu bilgiler genel referans amaçlıdır, kesin karar için veterinerine danışın"
+
+**Bitti sayılır:** Köpek türündeki bir hayvana "Kuduz" aşısı eklenince sonraki tarih otomatik öneriliyor.
+
+**Öğrenme notu:** Bu tablo kullanıcı verisi değil, referans veri — RLS "sadece okunabilir" şeklinde
+kurulacak, kullanıcıya özel satır filtresi (`user_id = auth.uid()`) burada geçerli değil.
+
+---
+
+## Faz 12 — Veteriner ziyaret geçmişi ve öneri kısmı
+**Amaç:** Aşı dışındaki veteriner ziyaretlerinin ve önerilerin kaydı tutulsun ("e-Nabız" hissi).
+
+- [ ] Tablo `vet_visits`: `pet_id`, `user_id`, `visit_date`, `vet_name`/klinik, `reason`, `procedure_notes`,
+      `recommendation`, `created_at`
+- [ ] RLS: `pets` ile aynı mantık (`user_id = auth.uid()`)
+- [ ] Hayvan detay sayfasında yeni bölüm: "Veteriner Geçmişi" listesi (tarihe göre sıralı)
+- [ ] Ziyaret ekleme/düzenleme/silme formu
+- [ ] Karar: aşılar ve ziyaretler tek bir kronolojik "geçmiş" görünümünde mi, ayrı listelerde mi
+      gösterilecek — bu faza başlarken netleştirilecek
+
+**Bitti sayılır:** Bir hayvana ziyaret kaydı eklenip, sebep ve yapılan işlemle birlikte listede görünüyor.
+
+---
+
+## Faz 13 — Anlaşmalı veteriner randevu sistemi
+**Amaç:** Kullanıcı anlaşmalı veterinerlerden uygun gün/saat seçip randevu alabilsin.
+
+- [ ] Tablo `vets`: ad, klinik, adres, uzmanlık/tür bilgisi
+- [ ] Tablo `vet_slots`: `vet_id`, `date`, `start_time`, `is_booked` (haftalık tekrar kuralı yerine somut
+      slot satırları — çift rezervasyon riskini azaltır)
+- [ ] Tablo `appointments`: `vet_id`, `slot_id`, `pet_id`, `user_id`, `status` (bekliyor/onaylandı/iptal), `created_at`
+- [ ] Çift rezervasyonu engellemek için `slot_id` üzerinde unique constraint
+- [ ] RLS: `vets` ve `vet_slots` giriş yapmış herkese okunur; `appointments` sadece kendi kayıtların
+- [ ] Randevu alma ekranı: veteriner seç → uygun gün/saat seç → hayvan seç → onayla
+- [ ] "Randevularım" sayfası: geçmiş/gelecek randevular, iptal etme
+- [ ] Karar: veteriner ve slot verisini kim/nasıl ekleyecek (admin migration mı, basit bir yönetim ekranı
+      mı) — bu faza başlarken netleştirilecek
+
+**Bitti sayılır:** Bir veterinerden boş bir saat seçip randevu alınca, aynı saat başka bir kullanıcıya
+boş görünmüyor.
+
+---
+
 ## Sonra (isteğe bağlı)
 - E-posta ile aşı hatırlatma (Supabase Edge Function + zamanlanmış görev)
 - Hayvan fotoğrafı (Supabase Storage)
