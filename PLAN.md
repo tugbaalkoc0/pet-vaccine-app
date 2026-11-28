@@ -162,11 +162,15 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 9 — Profil ayarları
 **Amaç:** Kullanıcı kendi hesap bilgilerini (isim, şifre) yönetebilsin.
 
-- [ ] Navbar'da kullanıcı adı/e-posta yanına profil ikonu (avatar ya da ☰) + dropdown menü
-- [ ] `/profil` sayfası ya da modal: isim değiştirme formu
-- [ ] Şifre değiştirme formu (yeni şifre + tekrar)
-- [ ] Form doğrulama, başarı/hata bildirimleri (mevcut toast sistemi kullanılsın)
-- [ ] Navbar'da isim girilmişse e-posta yerine isim gösterilsin
+- [x] Navbar'da kullanıcı adı/e-posta yanına dropdown menü
+- [x] `/profil` sayfası: isim değiştirme formu
+- [x] Şifre değiştirme formu (yeni şifre + tekrar)
+- [x] Form doğrulama, başarı/hata bildirimleri (mevcut toast sistemi kullanılsın)
+- [x] Navbar'da isim girilmişse e-posta yerine isim gösterilsin
+- [x] Demo hesabında profil formları devre dışı (ortak demo hesabının bozulmaması için)
+- [x] "Tehlikeli alan": hesabı tamamen silme (`delete_own_account()` security definer fonksiyonu,
+      `auth.users` silinince `pets`/`vaccinations` cascade ile otomatik silinir, demo hesap hem
+      arayüzde hem fonksiyon içinde engellenir)
 
 **Bitti sayılır:** İsim değiştirilip sayfa yenilenince kalıyor, şifre değiştirip çıkış-giriş yeni şifreyle çalışıyor.
 
