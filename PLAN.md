@@ -238,18 +238,31 @@ kurulacak, kullanıcıya özel satır filtresi (`user_id = auth.uid()`) burada g
 
 ---
 
-## Faz 13 — Anlaşmalı veteriner randevu sistemi
+## Faz 13a — Anlaşmalı veteriner listesi
+**Amaç:** Anlaşmalı veterinerlerin/kliniklerin görüntülenebildiği bir sayfa olsun (henüz randevu yok).
+
+- [x] Tablo `vets`: klinik adı, veteriner adı, adres, telefon, uzmanlık alanı, kısa not —
+      `vaccine_guidelines` ile aynı desen: referans veri, RLS "sadece okunabilir"
+      (admin verisi migration ile elle doldurulacak, gerçek değil örnek/demo klinik bilgisi)
+- [x] Örnek veri: 3 anlaşmalı klinik/veteriner migration'da eklendi
+- [x] `/veterinerler` sayfası: kart listesi (klinik adı, veteriner, adres, telefon, uzmanlık)
+- [x] Navbar'a "Anlaşmalı Veterinerler" linki
+
+**Bitti sayılır:** `/veterinerler` sayfası açılıp örnek veteriner/klinik kartları görünüyor.
+
+---
+
+## Faz 13b — Anlaşmalı veteriner randevu sistemi
 **Amaç:** Kullanıcı anlaşmalı veterinerlerden uygun gün/saat seçip randevu alabilsin.
 
-- [ ] Tablo `vets`: ad, klinik, adres, uzmanlık/tür bilgisi
 - [ ] Tablo `vet_slots`: `vet_id`, `date`, `start_time`, `is_booked` (haftalık tekrar kuralı yerine somut
       slot satırları — çift rezervasyon riskini azaltır)
 - [ ] Tablo `appointments`: `vet_id`, `slot_id`, `pet_id`, `user_id`, `status` (bekliyor/onaylandı/iptal), `created_at`
 - [ ] Çift rezervasyonu engellemek için `slot_id` üzerinde unique constraint
-- [ ] RLS: `vets` ve `vet_slots` giriş yapmış herkese okunur; `appointments` sadece kendi kayıtların
-- [ ] Randevu alma ekranı: veteriner seç → uygun gün/saat seç → hayvan seç → onayla
+- [ ] RLS: `vet_slots` giriş yapmış herkese okunur; `appointments` sadece kendi kayıtların
+- [ ] Randevu alma ekranı: veteriner seç (Faz 13a'daki listeden) → uygun gün/saat seç → hayvan seç → onayla
 - [ ] "Randevularım" sayfası: geçmiş/gelecek randevular, iptal etme
-- [ ] Karar: veteriner ve slot verisini kim/nasıl ekleyecek (admin migration mı, basit bir yönetim ekranı
+- [ ] Karar: slot verisini kim/nasıl ekleyecek (admin migration mı, basit bir yönetim ekranı
       mı) — bu faza başlarken netleştirilecek
 
 **Bitti sayılır:** Bir veterinerden boş bir saat seçip randevu alınca, aynı saat başka bir kullanıcıya

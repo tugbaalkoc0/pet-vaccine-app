@@ -9,6 +9,7 @@ import PetDetail from './pages/PetDetail'
 import PetVaccinations from './pages/PetVaccinations'
 import PetVisits from './pages/PetVisits'
 import Profile from './pages/Profile'
+import Vets from './pages/Vets'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
@@ -57,6 +58,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/veterinerler"
+            element={
+              <ProtectedRoute>
+                <Vets />
               </ProtectedRoute>
             }
           />
