@@ -224,13 +224,15 @@ kurulacak, kullanıcıya özel satır filtresi (`user_id = auth.uid()`) burada g
 ## Faz 12 — Veteriner ziyaret geçmişi ve öneri kısmı
 **Amaç:** Aşı dışındaki veteriner ziyaretlerinin ve önerilerin kaydı tutulsun ("e-Nabız" hissi).
 
-- [ ] Tablo `vet_visits`: `pet_id`, `user_id`, `visit_date`, `vet_name`/klinik, `reason`, `procedure_notes`,
+- [x] Tablo `vet_visits`: `pet_id`, `user_id`, `visit_date`, `vet_name`, `reason`, `procedure_notes`,
       `recommendation`, `created_at`
-- [ ] RLS: `pets` ile aynı mantık (`user_id = auth.uid()`)
-- [ ] Hayvan detay sayfasında yeni bölüm: "Veteriner Geçmişi" listesi (tarihe göre sıralı)
-- [ ] Ziyaret ekleme/düzenleme/silme formu
-- [ ] Karar: aşılar ve ziyaretler tek bir kronolojik "geçmiş" görünümünde mi, ayrı listelerde mi
-      gösterilecek — bu faza başlarken netleştirilecek
+- [x] RLS: `vaccinations` ile aynı desen (`user_id = auth.uid()` + `pet_id`'nin kullanıcıya ait olduğu kontrolü)
+- [x] Karar: hayvan sayfası yapısı değişti — `/hayvan/:id` artık sadece özet (ad/tür/yaş + iki büyük
+      buton), `/hayvan/:id/asilar` ve `/hayvan/:id/ziyaretler` ayrı sayfalar oldu. Aşı/ziyaret geçmişi
+      tek bir kronolojik listede birleştirilmedi — kullanıcı tercihiyle ayrı sayfalar seçildi
+- [x] `src/hooks/usePet.js`: hayvan bilgisini çeken ve realtime ile dinleyen ortak hook (üç sayfada da kullanılıyor)
+- [x] Ziyaret ekleme/düzenleme/silme formu (`VisitForm`, `VisitCard`), Realtime'a dahil edildi
+- [x] Dashboard'daki gecikmiş/yaklaşan aşı linkleri doğrudan `/asilar` alt sayfasına gidecek şekilde güncellendi
 
 **Bitti sayılır:** Bir hayvana ziyaret kaydı eklenip, sebep ve yapılan işlemle birlikte listede görünüyor.
 

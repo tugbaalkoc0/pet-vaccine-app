@@ -6,6 +6,8 @@ import { ToastProvider } from './context/ToastContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/Dashboard'
 import PetDetail from './pages/PetDetail'
+import PetVaccinations from './pages/PetVaccinations'
+import PetVisits from './pages/PetVisits'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -31,6 +33,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <PetDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/hayvan/:id/asilar"
+            element={
+              <ProtectedRoute>
+                <PetVaccinations />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/hayvan/:id/ziyaretler"
+            element={
+              <ProtectedRoute>
+                <PetVisits />
               </ProtectedRoute>
             }
           />

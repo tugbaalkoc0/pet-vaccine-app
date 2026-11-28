@@ -136,7 +136,7 @@ export default function Dashboard() {
             <ul className="mb-0 ps-3">
               {ozetAsilar.map(asi => (
                 <li key={asi.id}>
-                  <Link to={`/hayvan/${asi.pets.id}`} className="text-decoration-none">
+                  <Link to={`/hayvan/${asi.pets.id}/asilar`} className="text-decoration-none">
                     {asi.pets.name}
                   </Link>
                   {' '}— {asi.vaccine_name} ({turkceTarih(asi.next_due_date)}){' '}
