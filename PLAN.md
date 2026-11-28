@@ -182,11 +182,15 @@ Biten görevleri `- [x]` olarak işaretle.
 ## Faz 10 — Gerçek zamanlı senkronizasyon
 **Amaç:** Aynı hesapla iki sekme/cihaz açıkken biri değişiklik yapınca diğeri de anında görsün.
 
-- [ ] Supabase panelinde `pets` ve `vaccinations` tablolarında Realtime açılsın
-- [ ] Kullanıcıya özel `postgres_changes` aboneliği (insert/update/delete) için bir hook
-- [ ] Ana ekran ve hayvan detay sayfası, gelen event'e göre yerel state'i güncellesin (yeniden fetch yerine)
-- [ ] Sayfa/bileşen kapanınca abonelik temizlensin (memory leak olmasın)
-- [ ] İki farklı sekmede test: biri aşı eklerken diğeri anında görüyor mu?
+- [x] Supabase'de `pets` ve `vaccinations` tablolarında Realtime açıldı (`supabase_realtime` publication)
+- [x] Her iki tabloda `REPLICA IDENTITY FULL` açıldı (aksi halde DELETE olayları `user_id`/`pet_id`
+      filtresiyle eşleşmiyor, event hiç gelmiyor)
+- [x] Dashboard: kullanıcıya özel kanal, `pets`/`vaccinations` değişince mevcut fetch fonksiyonları
+      tekrar çağrılıyor (manuel state patch yerine — bu ölçekte yeterince hızlı ve çok daha basit)
+- [x] Hayvan detay sayfası: o hayvana özel kanal, `pets` değişirse state güncellenir/silinirse
+      uyarı gösterilir, `vaccinations` değişince liste tekrar çekilir
+- [x] Sayfa değişince abonelik `removeChannel` ile temizleniyor
+- [x] İki sekmede test edildi: hayvan ekleme/silme ve aşı ekleme/silme, ikisi de anında senkronize
 
 **Bitti sayılır:** Aynı hesapla açılan iki sekmeden birinde hayvan/aşı eklenince diğeri sayfa
 yenilemeden güncelleniyor.

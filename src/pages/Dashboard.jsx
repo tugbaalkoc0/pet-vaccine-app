@@ -62,6 +62,24 @@ export default function Dashboard() {
     ozetAsilariGetir()
   }, [user])
 
+  useEffect(() => {
+    if (!user) return
+
+    const channel = supabase
+      .channel(`dashboard-${user.id}`)
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'pets', filter: `user_id=eq.${user.id}` },
+        petleriGetir)
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'vaccinations', filter: `user_id=eq.${user.id}` },
+        ozetAsilariGetir)
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [user])
+
   const gecikmisSayisi = ozetAsilar.filter(a => asiDurumu(a.next_due_date) === 'gecikmis').length
   const yaklasanSayisi = ozetAsilar.filter(a => asiDurumu(a.next_due_date) === 'yaklasiyor').length
 

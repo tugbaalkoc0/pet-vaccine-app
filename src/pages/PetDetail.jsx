@@ -69,6 +69,29 @@ export default function PetDetail() {
     hepsiniGetir()
   }, [id])
 
+  useEffect(() => {
+    const channel = supabase
+      .channel(`pet-detail-${id}`)
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'pets', filter: `id=eq.${id}` },
+        (payload) => {
+          if (payload.eventType === 'DELETE') {
+            setPet(null)
+            setError('Bu hayvan başka bir yerden silindi.')
+            return
+          }
+          setPet(payload.new)
+        })
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'vaccinations', filter: `pet_id=eq.${id}` },
+        asilariGetir)
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [id])
+
   const handleYeniAsiEkle = () => {
     setDuzenlenenAsi(null)
     setFormAcik(true)
