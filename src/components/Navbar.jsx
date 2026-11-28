@@ -13,6 +13,9 @@ export default function Navbar() {
           <Link to="/veterinerler" className="btn btn-outline-secondary btn-sm">
             Anlaşmalı Veterinerler
           </Link>
+          <Link to="/randevularim" className="btn btn-outline-secondary btn-sm">
+            Randevularım
+          </Link>
           <div className="dropdown">
             <button
               className="btn btn-outline-secondary btn-sm dropdown-toggle"

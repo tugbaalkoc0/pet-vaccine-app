@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import { supabase } from '../lib/supabase'
 import Navbar from '../components/Navbar'
 
@@ -54,6 +55,9 @@ export default function Vets() {
                 {vet.address && <div className="small">📍 {vet.address}</div>}
                 {vet.phone && <div className="small">📞 {vet.phone}</div>}
                 {vet.note && <div className="small text-muted mt-2">{vet.note}</div>}
+                <Link to={`/veterinerler/${vet.id}/randevu-al`} className="btn btn-primary btn-sm mt-3 align-self-start">
+                  Randevu Al
+                </Link>
               </div>
             </div>
           ))}
