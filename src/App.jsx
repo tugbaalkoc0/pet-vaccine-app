@@ -10,6 +10,8 @@ import PetVaccinations from './pages/PetVaccinations'
 import PetVisits from './pages/PetVisits'
 import Profile from './pages/Profile'
 import Vets from './pages/Vets'
+import BookAppointment from './pages/BookAppointment'
+import MyAppointments from './pages/MyAppointments'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
@@ -66,6 +68,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Vets />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/veterinerler/:vetId/randevu-al"
+            element={
+              <ProtectedRoute>
+                <BookAppointment />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/randevularim"
+            element={
+              <ProtectedRoute>
+                <MyAppointments />
               </ProtectedRoute>
             }
           />

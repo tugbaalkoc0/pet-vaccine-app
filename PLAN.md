@@ -255,18 +255,24 @@ kurulacak, kullanıcıya özel satır filtresi (`user_id = auth.uid()`) burada g
 ## Faz 13b — Anlaşmalı veteriner randevu sistemi
 **Amaç:** Kullanıcı anlaşmalı veterinerlerden uygun gün/saat seçip randevu alabilsin.
 
-- [ ] Tablo `vet_slots`: `vet_id`, `date`, `start_time`, `is_booked` (haftalık tekrar kuralı yerine somut
-      slot satırları — çift rezervasyon riskini azaltır)
-- [ ] Tablo `appointments`: `vet_id`, `slot_id`, `pet_id`, `user_id`, `status` (bekliyor/onaylandı/iptal), `created_at`
-- [ ] Çift rezervasyonu engellemek için `slot_id` üzerinde unique constraint
-- [ ] RLS: `vet_slots` giriş yapmış herkese okunur; `appointments` sadece kendi kayıtların
-- [ ] Randevu alma ekranı: veteriner seç (Faz 13a'daki listeden) → uygun gün/saat seç → hayvan seç → onayla
-- [ ] "Randevularım" sayfası: geçmiş/gelecek randevular, iptal etme
-- [ ] Karar: slot verisini kim/nasıl ekleyecek (admin migration mı, basit bir yönetim ekranı
-      mı) — bu faza başlarken netleştirilecek
+- [x] Tablo `vet_slots`: `vet_id`, `slot_date`, `start_time`, `is_booked` — somut slot satırları
+      (haftalık tekrar kuralı yerine), her veteriner için ~20 gün, hafta içi, günde 6 saat migration
+      ile elle üretildi (statik örnek veri — gerçek uygulamada periyodik/cron ile üretilir)
+- [x] Tablo `appointments`: `vet_id`, `slot_id`, `pet_id`, `user_id`, `status` (sadece "onaylandı"/"iptal" —
+      onaylayan bir admin olmadığı için "bekliyor" durumu kaldırıldı, boş saat seçilince direkt onaylanıyor)
+- [x] Çift rezervasyonu engellemek için iki katman: `book_appointment()` fonksiyonu slotu `for update`
+      ile kilitleyip kontrol ediyor + `appointments.slot_id` üzerinde kısmi unique index (sadece
+      "onaylandı" durumundaki kayıtlar için, iptal edilenler tekrar rezervasyona izin veriyor)
+- [x] RLS: `vet_slots` giriş yapmış herkese okunur; `appointments` sadece kendi kayıtların; tüm
+      yazma işlemleri `book_appointment()`/`cancel_appointment()` security definer fonksiyonlarıyla
+- [x] Randevu alma ekranı (`/veterinerler/:vetId/randevu-al`): hayvan seç → uygun gün/saat seç → onayla
+- [x] "Randevularım" sayfası (`/randevularim`): geçmiş/gelecek randevular, iptal etme
+- [x] Karar: slot verisi migration ile elle eklendi (yönetim ekranı yok — proje kapsamı dışında)
+- [x] Demo hesabı: `reset_demo_data()` güncellendi, demo hesabının aldığı randevular her girişte
+      iptal edilip slotlar tekrar boşaltılıyor (ziyaretçiler slotları tüketip bitiremiyor)
 
 **Bitti sayılır:** Bir veterinerden boş bir saat seçip randevu alınca, aynı saat başka bir kullanıcıya
-boş görünmüyor.
+boş görünmüyor. Tarayıcıda randevu alma, iptal etme ve demo sıfırlamanın slotu boşalttığı doğrulandı.
 
 ---
 
