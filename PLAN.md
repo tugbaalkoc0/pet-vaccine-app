@@ -205,12 +205,14 @@ değişiklikleri alabiliyor. Ücretsiz plana dahil, ek maliyet yok.
 ## Faz 11 — Türe göre tavsiye edilen aşı aralığı
 **Amaç:** Aşı eklerken türe ve aşıya göre önerilen sonraki tarih otomatik önerilsin.
 
-- [ ] Tablo `vaccine_guidelines`: `species`, `vaccine_name`, önerilen ilk yaş, tekrar aralığı (ay), not
-- [ ] RLS: giriş yapmış herkes SELECT yapabilsin; INSERT/UPDATE/DELETE kapalı (veri migration ile elle doldurulacak)
-- [ ] Yaygın tür ve aşılar için referans veri migration'ı (kedi, köpek, kuş... kuduz, karma, parazit vb.)
-- [ ] Aşı ekleme formunda: hayvanın türüne göre aşı adı seçildiğinde "önerilen sonraki tarih" otomatik
-      dolsun, kullanıcı isterse değiştirebilsin
-- [ ] Görünür bir uyarı: "Bu bilgiler genel referans amaçlıdır, kesin karar için veterinerine danışın"
+- [x] Tablo `vaccine_guidelines`: `species`, `vaccine_name`, `booster_interval_months`, `note`
+- [x] RLS: giriş yapmış herkes SELECT yapabilsin; INSERT/UPDATE/DELETE için politika yok (sadece migration ile elle dolduruldu)
+- [x] Referans veri: kedi ve köpek için tüm mevcut aşı adları, kuş için sadece iç/dış parazit
+      (Kuduz/Karma/Lösemi gibi memeli aşıları kuşa biyolojik olarak uygulanmadığı için eklenmedi),
+      "diğer" türü için veri yok (tanımsız tür, elle giriş devam ediyor)
+- [x] Aşı ekleme formunda: tür + aşı adı + yapılış tarihi girilince "sonraki tarih" boşsa otomatik
+      dolduruluyor (sadece yeni kayıt eklerken, düzenlemede mevcut tarih ezilmiyor), kullanıcı isterse değiştirebiliyor
+- [x] Görünür uyarı: "Genel referanstır, kesin karar için veterinerine danış."
 
 **Bitti sayılır:** Köpek türündeki bir hayvana "Kuduz" aşısı eklenince sonraki tarih otomatik öneriliyor.
 
