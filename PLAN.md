@@ -171,6 +171,7 @@ Biten görevleri `- [x]` olarak işaretle.
 - [x] "Tehlikeli alan": hesabı tamamen silme (`delete_own_account()` security definer fonksiyonu,
       `auth.users` silinince `pets`/`vaccinations` cascade ile otomatik silinir, demo hesap hem
       arayüzde hem fonksiyon içinde engellenir)
+- [x] Düzeltme: `/profil` sayfasında ana sayfaya dönüş linki eksikti, eklendi
 
 **Bitti sayılır:** İsim değiştirilip sayfa yenilenince kalıyor, şifre değiştirip çıkış-giriş yeni şifreyle çalışıyor.
 

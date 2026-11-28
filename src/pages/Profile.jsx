@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
@@ -95,6 +95,10 @@ export default function Profile() {
     <>
       <Navbar />
       <div className="container" style={{ maxWidth: 480 }}>
+        <Link to="/" className="btn btn-outline-secondary btn-sm mb-4">
+          ← Hayvanlarım
+        </Link>
+
         <h2 className="mb-4">Profil ayarları</h2>
 
         {isDemo && (
