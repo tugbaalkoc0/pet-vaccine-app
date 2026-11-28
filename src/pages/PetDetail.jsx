@@ -178,6 +178,7 @@ export default function PetDetail() {
       {formAcik && (
         <VaccineForm
           petId={id}
+          species={pet?.species}
           vaccination={duzenlenenAsi}
           onClose={() => setFormAcik(false)}
           onSaved={handleFormSaved}
